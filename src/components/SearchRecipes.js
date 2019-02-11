@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Form, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import axios from 'axios';
 import { setRecipes } from '../actions';
 
 class SearchRecipes extends Component {
@@ -18,13 +19,15 @@ class SearchRecipes extends Component {
         let { ingredients, dish } = this.state;
         const url = `http://www.recipepuppy.com/api/?i=${ingredients}&${dish}`;
         
-        fetch(url, {
-            method: 'GET'
+        axios.get(url, {
+            crossDomain: true
         })
-        .then(response => response.json())
-        .then(json => {
-            this.props.setRecipes(json.results);
-        });
+        .then(function (response) {
+            this.props.setRecipes(response.results);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });        
     }
 
     render(){
